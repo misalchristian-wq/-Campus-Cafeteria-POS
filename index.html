@@ -21,12 +21,12 @@
 
     <main>
       <div class="workflow" aria-label="Transaction steps">
-        <span class="workflow-step is-current"><span class="step-number">01</span> Browse</span>
-        <span class="workflow-step"><span class="step-number">02</span> Order</span>
+        <span id="step-browse" class="workflow-step is-current"><span class="step-number">01</span> Browse</span>
+        <span id="step-order" class="workflow-step"><span class="step-number">02</span> Order</span>
         <span class="workflow-step"><span class="step-number">03</span> Payment</span>
         <span class="workflow-step"><span class="step-number">04</span> Receipt</span>
       </div>
-      <p class="stage-note">Stage 1 interface preview · Ordering and payment controls are enabled in the next stages.</p>
+      <p class="stage-note">Stage 2 ordering preview · Cash payment and receipts are available in Stage 3.</p>
 
       <div class="workspace-grid">
         <section class="panel products-panel" aria-labelledby="products-title">
@@ -43,6 +43,7 @@
               <div><p class="section-label">02 / Review</p><h2 id="order-title">Order summary</h2></div>
               <span class="order-count" id="order-count">0 items</span>
             </div>
+            <p id="cart-message" class="cart-message" role="status" aria-live="polite"></p>
             <div id="cart-items" class="empty-state">
               <span class="empty-icon" aria-hidden="true">＋</span>
               <strong>Your cart is empty</strong>

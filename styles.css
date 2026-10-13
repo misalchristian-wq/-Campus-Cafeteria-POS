@@ -59,6 +59,24 @@ h2 { margin-bottom: 2px; font-size: 21px; line-height: 1.25; letter-spacing: -.0
 .empty-icon { display: grid; place-items: center; width: 34px; height: 34px; margin-bottom: 9px; border-radius: 10px; background: var(--green-tint); color: var(--green-dark); font-size: 24px; line-height: 1; }
 .empty-state strong { font-size: 14px; }
 .empty-state p { max-width: 245px; margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+.cart-message { margin: 0; color: var(--green-dark); font-size: 12px; font-weight: 700; }
+.cart-message:not(:empty) { margin: -7px 0 13px; }
+.cart-items { display: grid; gap: 0; }
+.cart-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.cart-row:first-child { padding-top: 0; }
+.cart-row:last-child { padding-bottom: 0; border-bottom: 0; }
+.cart-details { display: flex; flex-direction: column; min-width: 0; }
+.cart-details strong { font-size: 13px; line-height: 1.25; }
+.unit-price { margin-top: 3px; color: var(--muted); font-size: 12px; }
+.quantity-controls { display: flex; align-items: center; gap: 7px; grid-column: 1; grid-row: 2; }
+.quantity-button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 1px solid #b8d2c1; border-radius: 7px; background: #fff; color: var(--green-dark); cursor: pointer; font-size: 17px; line-height: 1; }
+.quantity-button:not(:disabled):hover { background: var(--green-tint); }
+.quantity-button:disabled { cursor: not-allowed; opacity: .4; }
+.quantity-button:focus-visible, .remove-button:focus-visible { outline: 3px solid #8bbaa0; outline-offset: 2px; }
+.quantity-value { min-width: 17px; text-align: center; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.line-subtotal { justify-self: end; color: var(--green-dark); font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.remove-button { justify-self: end; grid-column: 2; grid-row: 2; padding: 3px 0; border: 0; background: transparent; color: #a43c35; cursor: pointer; font-size: 12px; font-weight: 700; }
+.remove-button:hover { text-decoration: underline; }
 .total-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; padding-top: 17px; border-top: 1px solid var(--line); font-size: 15px; font-weight: 700; }
 .total-row strong { color: var(--green-dark); font-size: 23px; line-height: 1; font-variant-numeric: tabular-nums; }
 .payment-panel .panel-heading { margin-bottom: 15px; }
