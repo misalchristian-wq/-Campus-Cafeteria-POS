@@ -4,10 +4,8 @@
 const welcomeScreen = document.querySelector("#welcome-screen");
 const loadingScreen = document.querySelector("#loading-screen");
 const appShell = document.querySelector("#app-shell");
-const errorDialog = document.querySelector("#error-dialog");
 const confirmDialog = document.querySelector("#confirm-dialog");
 const receiptDialog = document.querySelector("#receipt-dialog");
-const paymentMessage = document.querySelector("#payment-message");
 const cashInput = document.querySelector("#cash-amount");
 const payButton = document.querySelector("#pay-button");
 const paymentForm = document.querySelector("#payment-form");
@@ -47,49 +45,6 @@ document.querySelector("#begin-button").addEventListener("click", (event) => {
       }, 430);
     }, 2500);
   }, 430);
-});
-
-let errorTimer = null;
-let lastShownError = "";
-let lastErrorSource = "payment";
-
-function openError(message, source = "payment") {
-  if (!message || message === lastShownError) return;
-  lastShownError = message;
-  lastErrorSource = source;
-  document.querySelector("#error-dialog-message").textContent = message;
-  if (!errorDialog.open) errorDialog.showModal();
-}
-
-// The core continues to validate every edit. Mirror its error into a dialog after
-// a short pause so the modal does not interrupt each digit of a cash amount.
-const paymentObserver = new MutationObserver(() => {
-  window.clearTimeout(errorTimer);
-  const message = paymentMessage.classList.contains("is-error") ? paymentMessage.textContent.trim() : "";
-  if (!message) {
-    lastShownError = "";
-    return;
-  }
-  if (message === lastShownError) return;
-  errorTimer = window.setTimeout(() => {
-    const current = paymentMessage.classList.contains("is-error") ? paymentMessage.textContent.trim() : "";
-    if (current === message) openError(message);
-  }, 700);
-});
-paymentObserver.observe(paymentMessage, { attributes: true, childList: true, characterData: true, subtree: true });
-
-const cartMessage = document.querySelector("#cart-message");
-new MutationObserver(() => {
-  const message = cartMessage.textContent.trim();
-  const isError = message.startsWith("Maximum quantity");
-  cartMessage.classList.toggle("is-error", isError);
-  if (isError) openError(message, "cart");
-  else if (lastErrorSource === "cart") lastShownError = "";
-}).observe(cartMessage, { childList: true, characterData: true, subtree: true });
-
-document.querySelector("#error-dialog-close").addEventListener("click", () => errorDialog.close());
-errorDialog.addEventListener("close", () => {
-  if (lastErrorSource === "payment" && !cashInput.disabled) cashInput.focus();
 });
 
 // A capturing submit listener asks for confirmation before the existing handler runs.

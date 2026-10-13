@@ -53,8 +53,8 @@ function createScreen() {
   const ids = [
     "product-list", "cart-items", "order-count", "order-total", "step-browse", "step-order", "step-payment", "step-receipt",
     "cart-message", "payment-form", "cash-amount", "payment-message", "pay-button", "new-transaction", "receipt-content",
-    "welcome-screen", "loading-screen", "app-shell", "error-dialog", "confirm-dialog", "receipt-dialog", "theme-toggle",
-    "theme-label", "begin-button", "error-dialog-message", "error-dialog-close", "confirm-total", "confirm-cash", "confirm-change",
+    "welcome-screen", "loading-screen", "app-shell", "confirm-dialog", "receipt-dialog", "theme-toggle",
+    "theme-label", "begin-button", "confirm-total", "confirm-cash", "confirm-change",
     "confirm-cancel", "confirm-accept", "print-animation", "print-receipt",
   ];
   const roots = Object.fromEntries(ids.map((id) => [`#${id}`, element()]));
@@ -111,20 +111,28 @@ test("Begin shows the animated cooking loader before the workspace opens", () =>
   assert.equal(app.roots["#loading-screen"].hidden, true);
 });
 
-test("error, confirmation, receipt, printing, and reset use the modal flow", () => {
+test("cash errors update inline while confirmation and receipt use dialogs", () => {
   const app = createScreen();
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  assert.ok(html.indexOf('id="payment-message"') > html.indexOf('class="cash-field"'));
+  assert.ok(html.indexOf('id="payment-message"') < html.indexOf('class="field-hint"'));
+  assert.ok(!html.includes('id="error-dialog"'));
   app.click("#product-list", { productId: "2" });
   app.click("#product-list", { productId: "2" });
   app.click("#product-list", { productId: "1" });
   app.click("#product-list", { productId: "5" });
+  app.type("");
+  assert.match(app.roots["#payment-message"].textContent, /enter the cash received/);
   app.type("adasd");
-  app.notify("#payment-message");
-  assert.equal(app.runNextTimer(), 700);
-  assert.equal(app.roots["#error-dialog"].open, true);
-  assert.match(app.roots["#error-dialog-message"].textContent, /valid number/);
-  app.click("#error-dialog-close");
+  assert.match(app.roots["#payment-message"].textContent, /valid number/);
+  app.type("-50");
+  assert.match(app.roots["#payment-message"].textContent, /negative/);
+  app.type("100");
+  assert.match(app.roots["#payment-message"].textContent, /Insufficient payment/);
+  assert.equal(app.roots["#pay-button"].disabled, true);
   app.type("200");
-  app.notify("#payment-message");
+  assert.equal(app.roots["#payment-message"].textContent, "");
+  assert.equal(app.roots["#pay-button"].disabled, false);
   app.roots["#payment-form"].requestSubmit();
   assert.equal(app.roots["#confirm-dialog"].open, true);
   assert.equal(app.roots["#confirm-change"].textContent, "₱35.00");

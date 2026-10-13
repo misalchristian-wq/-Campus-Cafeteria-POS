@@ -146,7 +146,6 @@ html[data-theme="dark"] .theme-moon { display: none; }
 .order-counter svg { width: 16px; height: 16px; }
 .cart-message { margin: 0; color: var(--brand-ink); font-size: 12px; font-weight: 750; }
 .cart-message:not(:empty) { margin: -8px 0 13px; }
-.cart-message.is-error { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .empty-state { display: flex; align-items: center; flex-direction: column; justify-content: center; min-height: 174px; padding: 24px; border: 1px dashed var(--line); border-radius: 14px; background: var(--surface-soft); text-align: center; }
 .empty-icon { display: grid; place-items: center; width: 45px; height: 45px; margin-bottom: 9px; border-radius: 13px; background: var(--brand-soft); color: var(--brand-ink); font-size: 27px; line-height: 1; }
 .empty-icon svg { width: 22px; height: 22px; }
@@ -177,7 +176,7 @@ label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 800; }
 .cash-field input::placeholder { color: var(--muted); opacity: .65; }
 .field-hint { margin: 8px 0 0; color: var(--muted); font-size: 11px; }
 .payment-message { margin: 0; font-size: 12px; }
-.payment-message.is-error { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.payment-message.is-error { margin-top: 9px; padding: 10px 12px; border: 1px solid var(--danger); border-radius: 9px; background: var(--danger-soft); color: var(--danger); font-weight: 750; }
 .payment-message.is-success { margin-top: 13px; padding: 11px 13px; border: 1px solid #a9d5b5; border-radius: 10px; background: var(--brand-soft); color: var(--brand-ink); font-weight: 800; }
 .payment-button { width: 100%; min-height: 49px; margin-top: 17px; }
 .payment-button svg { margin-left: auto; }
@@ -191,7 +190,6 @@ footer { padding: 25px 0 32px; color: var(--muted); font-size: 11px; text-align:
 .app-dialog p:not(.section-label) { color: var(--muted); font-size: 14px; }
 .dialog-symbol { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 18px; border-radius: 14px; }
 .dialog-symbol svg { width: 24px; height: 24px; }
-.dialog-symbol.is-error { background: var(--danger-soft); color: var(--danger); }
 .dialog-symbol.is-confirm { background: #fff0dd; color: #ae671b; }
 .dialog-symbol.is-success { background: var(--brand-soft); color: var(--brand-ink); }
 .dialog-actions, .receipt-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
