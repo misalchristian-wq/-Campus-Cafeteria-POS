@@ -19,13 +19,14 @@ function createApp() {
     return {
       children: [],
       dataset: {},
+      attributes: {},
       listeners: {},
       classList: { toggle() {} },
       value: "",
       disabled: false,
       append(...children) { this.children.push(...children); },
       replaceChildren(...children) { this.children = children; },
-      setAttribute() {},
+      setAttribute(name, value) { this.attributes[name] = value; },
       addEventListener(type, handler) { this.listeners[type] = handler; },
       focus() { this.listeners.focus?.(); },
     };
@@ -50,10 +51,14 @@ function createApp() {
     roots["#cash-amount"].value = value;
     roots["#payment-form"].listeners.submit({ preventDefault() {} });
   }
+  function type(value) {
+    roots["#cash-amount"].value = value;
+    roots["#cash-amount"].listeners.input();
+  }
   function visibleText(node) {
     return [node.textContent || "", ...node.children.map(visibleText)].join(" ");
   }
-  return { roots, click, submit, visibleText };
+  return { roots, click, submit, type, visibleText };
 }
 
 test("sample order totals ₱165.00", () => {
@@ -114,13 +119,47 @@ test("menu and cart clicks update the displayed total", () => {
 });
 
 test("cash validation and the sample change are exact", () => {
-  for (const raw of ["", "  ", "abc", "-50", "12a", "1.234"]) {
-    assert.equal(validatePayment(raw, 16500).message, "Please enter a valid payment amount.");
+  for (const [raw, expected] of [
+    ["", "Please enter the cash received."],
+    ["  ", "Please enter the cash received."],
+    ["d", "Please enter a valid number with up to two decimal places."],
+    ["abc", "Please enter a valid number with up to two decimal places."],
+    ["12a", "Please enter a valid number with up to two decimal places."],
+    ["1.234", "Please enter a valid number with up to two decimal places."],
+    ["-50", "Cash received cannot be negative."],
+    ["-50.00", "Cash received cannot be negative."],
+  ]) {
+    assert.equal(validatePayment(raw, 16500).message, expected);
   }
   assert.equal(validatePayment("100", 16500).message, "Insufficient payment. Please enter at least ₱165.00.");
   assert.equal(validatePayment("165", 16500).paid, 16500);
   assert.equal(validatePayment("200", 16500).paid, 20000);
   assert.equal(computeChange(20000, 16500), 3500);
+});
+
+test("cash errors update as the cashier types and when the cart total changes", () => {
+  const { roots, click, type } = createApp();
+  click("#product-list", { productId: "2" });
+
+  for (const [value, message] of [
+    ["", "Please enter the cash received."],
+    ["adasd", "Please enter a valid number with up to two decimal places."],
+    ["-50", "Cash received cannot be negative."],
+    ["20", "Insufficient payment. Please enter at least ₱65.00."],
+  ]) {
+    type(value);
+    assert.equal(roots["#payment-message"].textContent, message);
+    assert.equal(roots["#cash-amount"].attributes["aria-invalid"], "true");
+    assert.equal(roots["#pay-button"].disabled, true);
+  }
+
+  type("100");
+  assert.equal(roots["#payment-message"].textContent, "");
+  assert.equal(roots["#cash-amount"].attributes["aria-invalid"], "false");
+  assert.equal(roots["#pay-button"].disabled, false);
+  click("#product-list", { productId: "2" });
+  assert.equal(roots["#payment-message"].textContent, "Insufficient payment. Please enter at least ₱130.00.");
+  assert.equal(roots["#pay-button"].disabled, true);
 });
 
 test("receipt is a snapshot of items and amounts", () => {
@@ -146,9 +185,13 @@ test("payment locks the sale and New Transaction clears it", () => {
   click("#product-list", { productId: "1" });
   click("#product-list", { productId: "5" });
   submit("");
-  assert.match(roots["#payment-message"].textContent, /valid payment amount/);
+  assert.equal(roots["#payment-message"].textContent, "Please enter the cash received.");
+  submit("d");
+  assert.equal(roots["#payment-message"].textContent, "Please enter a valid number with up to two decimal places.");
+  submit("-50");
+  assert.equal(roots["#payment-message"].textContent, "Cash received cannot be negative.");
   submit("100");
-  assert.match(roots["#payment-message"].textContent, /Insufficient payment/);
+  assert.equal(roots["#payment-message"].textContent, "Insufficient payment. Please enter at least ₱165.00.");
   submit("200");
   assert.equal(roots["#payment-message"].textContent, "Payment successful. Change: ₱35.00.");
   assert.equal(roots["#cash-amount"].disabled, true);

@@ -56,7 +56,7 @@
             <div class="panel-heading"><div><p class="section-label">03 / Collect</p><h2 id="payment-title">Cash payment</h2></div></div>
             <form id="payment-form" novalidate>
               <label for="cash-amount">Cash received</label>
-              <div class="cash-field"><span aria-hidden="true">₱</span><input id="cash-amount" name="cash-amount" type="text" inputmode="decimal" placeholder="0.00" autocomplete="off" maxlength="12"></div>
+              <div class="cash-field"><span aria-hidden="true">₱</span><input id="cash-amount" name="cash-amount" type="number" inputmode="decimal" placeholder="0.00" autocomplete="off" maxlength="12" aria-describedby="payment-message"></div>
               <p class="field-hint">Enter the amount given by the customer.</p>
               <p id="payment-message" class="payment-message" aria-live="polite"></p>
               <button id="pay-button" class="button button-primary payment-button" type="submit">Complete payment</button>

@@ -23,7 +23,7 @@ The application now supports the full cash transaction flow. All transaction dat
 
 1. Open `index.html` in a desktop browser. No installation or server is needed.
 2. Add **Fried Chicken (1 pc)** twice, **Rice (Plain)** once, and **Iced Tea (cup)** once. Check that the line subtotals are **₱130.00**, **₱15.00**, and **₱20.00**, and the total is **₱165.00**.
-3. Try submitting blank, `abc`, and `-50`. Each should show **Please enter a valid payment amount.** Try `100`; it should show an insufficient payment message with **₱165.00**.
+3. Click **Complete payment** with the cash field blank to see **Please enter the cash received.** Then type `d`, `-50`, and `100`; the message should update as you type to **Please enter a valid number with up to two decimal places.**, **Cash received cannot be negative.**, and **Insufficient payment. Please enter at least ₱165.00.**, respectively. Complete payment stays disabled while the entry is invalid. Type `200` to clear the error and enable it.
 4. Enter `200` and select **Complete payment**. Check for **Payment successful**, **₱35.00** change, and a receipt with all items, quantities, subtotals, total, cash received, change, and transaction reference.
 5. Check that cart and payment controls are locked. Select **New Transaction** and check that the cart, payment amount, message, and receipt clear and that the menu can be used again.
 6. Also test decreasing Fried Chicken to one (**₱100.00** total), increasing it again (**₱165.00**), removing Iced Tea (**₱145.00**), and removing all lines (**₱0.00**). Narrow the window to check the single-column layout.

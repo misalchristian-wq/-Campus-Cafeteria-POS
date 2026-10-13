@@ -85,6 +85,8 @@ label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 700; }
 .cash-field > span { display: grid; place-items: center; align-self: stretch; width: 42px; background: #f2f6f2; color: var(--green-dark); font-weight: 800; }
 .cash-field input { width: 100%; height: 100%; padding: 0 12px; border: 0; outline: 0; color: var(--ink); }
 .cash-field:focus-within { outline: 3px solid #8bbaa0; outline-offset: 2px; }
+.cash-field:has(input[aria-invalid="true"]) { border-color: #d67f77; }
+.cash-field:has(input[aria-invalid="true"]):focus-within { outline-color: #e8b1ab; }
 .cash-field:has(input:disabled) { opacity: .58; }
 .field-hint { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
 .payment-message { min-height: 0; margin: 0; font-size: 13px; }

@@ -14,6 +14,7 @@ const MAX_PAYMENT_CENTAVOS = 10000000;
 let cart = [];
 let completedSale = null;
 let paymentStarted = false;
+let paymentTouched = false;
 let transactionCounter = 0;
 
 // One formatter can be reused by the cart and receipt stages.
@@ -169,13 +170,22 @@ function showCartMessage(message) {
 // Accept only whole pesos or up to two decimal places; never use parseFloat.
 function validatePayment(raw, total) {
   const value = typeof raw === "string" ? raw.trim() : "";
+  if (value === "") {
+    return { ok: false, message: "Please enter the cash received." };
+  }
+  if (value === "-" || /^-\d+(?:\.\d{1,2})?$/.test(value)) {
+    return { ok: false, message: "Cash received cannot be negative." };
+  }
   if (!/^\d+(?:\.\d{1,2})?$/.test(value)) {
-    return { ok: false, message: "Please enter a valid payment amount." };
+    return { ok: false, message: "Please enter a valid number with up to two decimal places." };
   }
   const [pesos, centavos = ""] = value.split(".");
   const paid = Number(pesos) * 100 + Number(centavos.padEnd(2, "0"));
-  if (!Number.isSafeInteger(paid) || paid > MAX_PAYMENT_CENTAVOS) {
-    return { ok: false, message: "Please enter a valid payment amount." };
+  if (!Number.isSafeInteger(paid)) {
+    return { ok: false, message: "Please enter a valid number with up to two decimal places." };
+  }
+  if (paid > MAX_PAYMENT_CENTAVOS) {
+    return { ok: false, message: `Cash received cannot exceed ${formatMoney(MAX_PAYMENT_CENTAVOS)}.` };
   }
   if (paid < total) {
     return { ok: false, message: `Insufficient payment. Please enter at least ${formatMoney(total)}.` };
@@ -203,6 +213,22 @@ function showPaymentMessage(message, kind = "") {
   display.textContent = message;
   display.className = `payment-message${kind ? ` is-${kind}` : ""}`;
   display.setAttribute("role", kind === "error" ? "alert" : "status");
+  document.querySelector("#cash-amount").setAttribute("aria-invalid", kind === "error" ? "true" : "false");
+}
+
+// Show the current error as the cashier types or changes the order total.
+function updatePaymentFeedback() {
+  if (!paymentTouched || completedSale) return;
+  const payButton = document.querySelector("#pay-button");
+  if (cart.length === 0) {
+    payButton.disabled = true;
+    showPaymentMessage("Your cart is empty. Please add at least one product before paying.", "error");
+    return;
+  }
+  const cashInput = document.querySelector("#cash-amount");
+  const result = validatePayment(cashInput.value, computeTotal(cart));
+  payButton.disabled = !result.ok;
+  showPaymentMessage(result.ok ? "" : result.message, result.ok ? "" : "error");
 }
 
 function renderReceipt(receipt) {
@@ -272,7 +298,9 @@ function renderReceipt(receipt) {
 function completePayment(event) {
   event.preventDefault();
   if (completedSale) return;
+  paymentTouched = true;
   if (cart.length === 0) {
+    document.querySelector("#pay-button").disabled = true;
     showPaymentMessage("Your cart is empty. Please add at least one product before paying.", "error");
     return;
   }
@@ -280,6 +308,7 @@ function completePayment(event) {
   const cashInput = document.querySelector("#cash-amount");
   const result = validatePayment(cashInput.value, computeTotal(cart));
   if (!result.ok) {
+    document.querySelector("#pay-button").disabled = true;
     showPaymentMessage(result.message, "error");
     paymentStarted = true;
     renderWorkflow();
@@ -304,6 +333,7 @@ function newTransaction() {
   cart = [];
   completedSale = null;
   paymentStarted = false;
+  paymentTouched = false;
   const cashInput = document.querySelector("#cash-amount");
   cashInput.value = "";
   cashInput.disabled = false;
@@ -330,11 +360,12 @@ function startOrdering() {
     }
   });
   cashInput.addEventListener("input", () => {
-    showPaymentMessage("");
+    paymentTouched = true;
     if (cart.length > 0 && !completedSale) {
       paymentStarted = true;
       renderWorkflow();
     }
+    updatePaymentFeedback();
   });
 
   document.querySelector("#product-list").addEventListener("click", (event) => {
@@ -351,7 +382,7 @@ function startOrdering() {
     cart = nextCart;
     paymentStarted = false;
     renderCart();
-    showPaymentMessage("");
+    updatePaymentFeedback();
     showCartMessage(`${product.name} added to cart.`);
   });
 
@@ -374,7 +405,7 @@ function startOrdering() {
     }
     paymentStarted = false;
     renderCart();
-    showPaymentMessage("");
+    updatePaymentFeedback();
   });
 }
 
