@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Cafeteria POS</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand-mark" aria-hidden="true">CC</div>
+      <div>
+        <p class="eyebrow">Campus cafeteria</p>
+        <h1>Point of Sale</h1>
+        <p class="header-description">Choose items, review the order, and collect cash.</p>
+      </div>
+      <span class="workspace-tag">Cashier workspace</span>
+    </header>
+
+    <main>
+      <div class="workflow" aria-label="Transaction steps">
+        <span class="workflow-step is-current"><span class="step-number">01</span> Browse</span>
+        <span class="workflow-step"><span class="step-number">02</span> Order</span>
+        <span class="workflow-step"><span class="step-number">03</span> Payment</span>
+        <span class="workflow-step"><span class="step-number">04</span> Receipt</span>
+      </div>
+      <p class="stage-note">Stage 1 interface preview · Ordering and payment controls are enabled in the next stages.</p>
+
+      <div class="workspace-grid">
+        <section class="panel products-panel" aria-labelledby="products-title">
+          <div class="panel-heading">
+            <div><p class="section-label">01 / Browse</p><h2 id="products-title">Menu</h2><p class="section-description">Select from today’s cafeteria items.</p></div>
+            <span class="item-count">6 items</span>
+          </div>
+          <div id="product-list" class="product-grid"></div>
+        </section>
+
+        <div class="checkout-column">
+          <section class="panel order-panel" aria-labelledby="order-title">
+            <div class="panel-heading">
+              <div><p class="section-label">02 / Review</p><h2 id="order-title">Order summary</h2></div>
+              <span class="order-count" id="order-count">0 items</span>
+            </div>
+            <div id="cart-items" class="empty-state">
+              <span class="empty-icon" aria-hidden="true">＋</span>
+              <strong>Your cart is empty</strong>
+              <p>Items you add will appear here with their quantities and subtotals.</p>
+            </div>
+            <div class="total-row"><span>Total due</span><strong id="order-total">₱0.00</strong></div>
+          </section>
+
+          <section class="panel payment-panel" aria-labelledby="payment-title">
+            <div class="panel-heading"><div><p class="section-label">03 / Collect</p><h2 id="payment-title">Cash payment</h2></div></div>
+            <form id="payment-form" novalidate>
+              <label for="cash-amount">Cash received</label>
+              <div class="cash-field"><span aria-hidden="true">₱</span><input id="cash-amount" name="cash-amount" type="text" inputmode="decimal" placeholder="0.00" autocomplete="off" disabled></div>
+              <p class="field-hint">Enter the amount given by the customer.</p>
+              <p id="payment-message" class="payment-message" aria-live="polite"></p>
+              <button class="button button-primary payment-button" type="submit" disabled>Complete payment</button>
+            </form>
+          </section>
+        </div>
+
+        <section class="panel receipt-panel" aria-labelledby="receipt-title">
+          <div class="panel-heading receipt-heading">
+            <div><p class="section-label">04 / Finish</p><h2 id="receipt-title">Digital receipt</h2><p class="section-description">A receipt appears here after payment.</p></div>
+            <button id="new-transaction" class="button button-secondary" type="button" disabled>New Transaction</button>
+          </div>
+          <div id="receipt-content" class="receipt-empty"><span class="receipt-icon" aria-hidden="true">▤</span><span>No completed transaction yet.</span></div>
+        </section>
+      </div>
+    </main>
+    <footer>Campus Cafeteria POS · IT 415 Practical Examination</footer>
+  </div>
+</body>
+</html>
