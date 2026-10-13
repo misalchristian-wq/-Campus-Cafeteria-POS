@@ -23,10 +23,10 @@
       <div class="workflow" aria-label="Transaction steps">
         <span id="step-browse" class="workflow-step is-current"><span class="step-number">01</span> Browse</span>
         <span id="step-order" class="workflow-step"><span class="step-number">02</span> Order</span>
-        <span class="workflow-step"><span class="step-number">03</span> Payment</span>
-        <span class="workflow-step"><span class="step-number">04</span> Receipt</span>
+        <span id="step-payment" class="workflow-step"><span class="step-number">03</span> Payment</span>
+        <span id="step-receipt" class="workflow-step"><span class="step-number">04</span> Receipt</span>
       </div>
-      <p class="stage-note">Stage 2 ordering preview · Cash payment and receipts are available in Stage 3.</p>
+      <p class="stage-note">Complete a cash payment to create a receipt. Use New Transaction for the next sale.</p>
 
       <div class="workspace-grid">
         <section class="panel products-panel" aria-labelledby="products-title">
@@ -56,10 +56,10 @@
             <div class="panel-heading"><div><p class="section-label">03 / Collect</p><h2 id="payment-title">Cash payment</h2></div></div>
             <form id="payment-form" novalidate>
               <label for="cash-amount">Cash received</label>
-              <div class="cash-field"><span aria-hidden="true">₱</span><input id="cash-amount" name="cash-amount" type="text" inputmode="decimal" placeholder="0.00" autocomplete="off" disabled></div>
+              <div class="cash-field"><span aria-hidden="true">₱</span><input id="cash-amount" name="cash-amount" type="text" inputmode="decimal" placeholder="0.00" autocomplete="off" maxlength="12"></div>
               <p class="field-hint">Enter the amount given by the customer.</p>
               <p id="payment-message" class="payment-message" aria-live="polite"></p>
-              <button class="button button-primary payment-button" type="submit" disabled>Complete payment</button>
+              <button id="pay-button" class="button button-primary payment-button" type="submit">Complete payment</button>
             </form>
           </section>
         </div>

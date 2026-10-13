@@ -88,12 +88,27 @@ label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 700; }
 .cash-field:has(input:disabled) { opacity: .58; }
 .field-hint { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
 .payment-message { min-height: 0; margin: 0; font-size: 13px; }
-.payment-message:not(:empty) { margin-top: 10px; }
+.payment-message:not(:empty) { margin-top: 10px; padding: 10px 12px; border-radius: 8px; }
+.payment-message.is-error { border: 1px solid #ecc7c3; background: #fff3f2; color: #9b302b; }
+.payment-message.is-success { border: 1px solid #bdddc7; background: #edf8f0; color: var(--green-dark); font-weight: 700; }
 .payment-button { width: 100%; margin-top: 16px; }
 .receipt-panel { grid-column: 1 / -1; }
 .receipt-heading { align-items: center; margin-bottom: 15px; }
 .receipt-empty { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 74px; border: 1px dashed #d3dfd6; border-radius: 10px; background: #fafcf9; color: var(--muted); font-size: 13px; }
 .receipt-icon { color: var(--green); font-size: 24px; line-height: 1; }
+.receipt-paper { max-width: 620px; margin: 0 auto; padding: 22px; border: 1px solid #cfded3; border-radius: 10px; background: #fcfefb; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13px; }
+.receipt-meta { display: flex; flex-direction: column; gap: 3px; padding-bottom: 15px; border-bottom: 1px dashed #b7cbbd; overflow-wrap: anywhere; }
+.receipt-meta strong { color: var(--green-dark); font-size: 15px; }
+.receipt-meta span { color: var(--muted); font-size: 11px; }
+.receipt-table { width: 100%; margin: 13px 0; border-collapse: collapse; table-layout: fixed; }
+.receipt-table th, .receipt-table td { padding: 6px 4px; text-align: left; vertical-align: top; }
+.receipt-table th { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+.receipt-table th:first-child, .receipt-table td:first-child { width: 60%; overflow-wrap: anywhere; }
+.receipt-table th:nth-child(2), .receipt-table td:nth-child(2) { width: 12%; text-align: center; }
+.receipt-table th:last-child, .receipt-table td:last-child { width: 28%; text-align: right; white-space: nowrap; }
+.receipt-totals { display: grid; gap: 6px; padding-top: 13px; border-top: 1px dashed #b7cbbd; }
+.receipt-totals > div { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+.receipt-totals > div:last-child { padding-top: 7px; border-top: 1px solid var(--line); color: var(--green-dark); font-size: 15px; }
 footer { padding: 22px 0 30px; color: var(--muted); font-size: 12px; text-align: center; }
 
 @media (max-width: 860px) {
@@ -110,5 +125,6 @@ footer { padding: 22px 0 30px; color: var(--muted); font-size: 12px; text-align:
   .product-grid { grid-template-columns: 1fr; }
   .product-card { min-height: 135px; }
   .receipt-heading { align-items: flex-start; flex-direction: column; }
+  .receipt-paper { padding: 14px; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .button { transition: none; } }
