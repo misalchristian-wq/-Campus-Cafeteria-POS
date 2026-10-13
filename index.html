@@ -3,77 +3,113 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ef">
   <title>Campus Cafeteria POS</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
+  <script src="experience.js" defer></script>
 </head>
-<body>
-  <div class="app-shell">
-    <header class="app-header">
-      <div class="brand-mark" aria-hidden="true">CC</div>
-      <div>
-        <p class="eyebrow">Campus cafeteria</p>
-        <h1>Point of Sale</h1>
-        <p class="header-description">Choose items, review the order, and collect cash.</p>
+<body class="is-landing">
+  <!-- Local SVG symbols keep every icon sharp in light and dark mode. -->
+  <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-chef" viewBox="0 0 24 24"><path d="M7 18h10v3H7v-3Zm-1 0a4 4 0 0 1-3.5-4 4 4 0 0 1 2.8-3.8A6 6 0 0 1 11 4a6 6 0 0 1 5.8 4.4A4.7 4.7 0 0 1 21 13a5 5 0 0 1-4.5 5H6Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="icon-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.3 11.2a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 8H6M10 21h.01M18 21h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8 8.5 8.5 0 1 0 20.2 15.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="icon-printer" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6v-7Zm12-2h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24"><path d="M12 3 2.8 19a1.5 1.5 0 0 0 1.3 2.2h15.8a1.5 1.5 0 0 0 1.3-2.2L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v5m0 3h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  </svg>
+
+  <section id="welcome-screen" class="welcome-screen" aria-labelledby="welcome-title">
+    <div class="welcome-orb welcome-orb-one"></div><div class="welcome-orb welcome-orb-two"></div>
+    <div class="welcome-content">
+      <div class="welcome-brand"><span class="chef-logo"><svg><use href="#icon-chef"></use></svg></span><span>Campus Cafeteria <b>POS</b></span></div>
+      <div class="welcome-copy">
+        <p class="eyebrow">A better way to serve</p>
+        <h1 id="welcome-title">Fresh orders.<br><em>Faster service.</em></h1>
+        <p>Everything your cafeteria needs for a smooth cash checkout, served in one simple workspace.</p>
+        <button id="begin-button" class="button button-primary begin-button" type="button">Click to Begin <svg><use href="#icon-arrow"></use></svg></button>
+        <span class="welcome-footnote">IT 415 · Campus Cafeteria Point of Sale</span>
       </div>
-      <span class="workspace-tag">Cashier workspace</span>
+      <div class="welcome-visual" aria-hidden="true"><div class="welcome-photo"></div><span class="visual-caption">Made for the lunch rush <span>✦</span></span></div>
+    </div>
+  </section>
+
+  <section id="loading-screen" class="loading-screen" aria-label="Preparing the cashier workspace" hidden>
+    <div class="loading-card">
+      <div class="loading-illustration"><img src="assets/foodie-maryam-loading.gif" alt="Animated vegetables tossing in a cooking pan"></div>
+      <p class="eyebrow">Almost ready</p>
+      <h2>Cooking up your workspace</h2>
+      <p>Preparing the menu and checkout station...</p>
+      <div class="loading-track" role="progressbar" aria-label="Loading the POS"><span></span></div>
+    </div>
+  </section>
+
+  <div class="app-shell" id="app-shell">
+    <header class="app-header">
+      <div class="header-brand"><span class="chef-logo"><svg><use href="#icon-chef"></use></svg></span><div><p class="eyebrow">Campus cafeteria</p><strong>Campus Cafeteria <span>POS</span></strong></div></div>
+      <div class="header-actions"><span class="workspace-tag"><span class="live-dot"></span> Cashier workspace</span><button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme"><svg class="theme-icon theme-moon"><use href="#icon-moon"></use></svg><svg class="theme-icon theme-sun"><use href="#icon-sun"></use></svg><span id="theme-label">Dark mode</span></button></div>
     </header>
 
     <main>
+      <div class="page-intro"><div><p class="eyebrow">Today's service</p><h1>Good food, quick checkout.</h1><p>Choose from the menu, check the order, and complete a cash sale.</p></div><span class="service-pill">● &nbsp; Ready to serve</span></div>
       <div class="workflow" aria-label="Transaction steps">
         <span id="step-browse" class="workflow-step is-current"><span class="step-number">01</span> Browse</span>
         <span id="step-order" class="workflow-step"><span class="step-number">02</span> Order</span>
         <span id="step-payment" class="workflow-step"><span class="step-number">03</span> Payment</span>
         <span id="step-receipt" class="workflow-step"><span class="step-number">04</span> Receipt</span>
       </div>
-      <p class="stage-note">Complete a cash payment to create a receipt. Use New Transaction for the next sale.</p>
 
       <div class="workspace-grid">
         <section class="panel products-panel" aria-labelledby="products-title">
-          <div class="panel-heading">
-            <div><p class="section-label">01 / Browse</p><h2 id="products-title">Menu</h2><p class="section-description">Select from today’s cafeteria items.</p></div>
-            <span class="item-count">6 items</span>
-          </div>
+          <div class="panel-heading"><div><p class="section-label">The menu</p><h2 id="products-title">What can we get you?</h2><p class="section-description">Fresh cafeteria favorites, ready to add.</p></div><span class="item-count">6 choices</span></div>
           <div id="product-list" class="product-grid"></div>
         </section>
 
         <div class="checkout-column">
           <section class="panel order-panel" aria-labelledby="order-title">
-            <div class="panel-heading">
-              <div><p class="section-label">02 / Review</p><h2 id="order-title">Order summary</h2></div>
-              <span class="order-count" id="order-count">0 items</span>
-            </div>
+            <div class="panel-heading"><div><p class="section-label">Your order</p><h2 id="order-title">Order summary</h2></div><span class="order-counter"><svg aria-hidden="true"><use href="#icon-cart"></use></svg><span id="order-count">0 items</span></span></div>
             <p id="cart-message" class="cart-message" role="status" aria-live="polite"></p>
-            <div id="cart-items" class="empty-state">
-              <span class="empty-icon" aria-hidden="true">＋</span>
-              <strong>Your cart is empty</strong>
-              <p>Items you add will appear here with their quantities and subtotals.</p>
-            </div>
+            <div id="cart-items" class="empty-state"><span class="empty-icon" aria-hidden="true"><svg><use href="#icon-cart"></use></svg></span><strong>Your cart is empty</strong><p>Choose something tasty from the menu to get started.</p></div>
             <div class="total-row"><span>Total due</span><strong id="order-total">₱0.00</strong></div>
           </section>
 
           <section class="panel payment-panel" aria-labelledby="payment-title">
-            <div class="panel-heading"><div><p class="section-label">03 / Collect</p><h2 id="payment-title">Cash payment</h2></div></div>
+            <div class="panel-heading"><div><p class="section-label">Checkout</p><h2 id="payment-title">Cash payment</h2><p class="section-description">Enter the amount received to complete this order.</p></div></div>
             <form id="payment-form" novalidate>
               <label for="cash-amount">Cash received</label>
-              <div class="cash-field"><span aria-hidden="true">₱</span><input id="cash-amount" name="cash-amount" type="number" inputmode="decimal" placeholder="0.00" autocomplete="off" maxlength="12" aria-describedby="payment-message"></div>
-              <p class="field-hint">Enter the amount given by the customer.</p>
+              <div class="cash-field"><span aria-hidden="true">₱</span><input id="cash-amount" name="cash-amount" type="text" inputmode="decimal" placeholder="0.00" autocomplete="off" maxlength="12" aria-describedby="payment-message"></div>
+              <p class="field-hint">Cash only · Amount in Philippine pesos</p>
               <p id="payment-message" class="payment-message" aria-live="polite"></p>
-              <button id="pay-button" class="button button-primary payment-button" type="submit">Complete payment</button>
+              <button id="pay-button" class="button button-primary payment-button" type="submit">Complete payment <svg aria-hidden="true"><use href="#icon-arrow"></use></svg></button>
             </form>
           </section>
         </div>
-
-        <section class="panel receipt-panel" aria-labelledby="receipt-title">
-          <div class="panel-heading receipt-heading">
-            <div><p class="section-label">04 / Finish</p><h2 id="receipt-title">Digital receipt</h2><p class="section-description">A receipt appears here after payment.</p></div>
-            <button id="new-transaction" class="button button-secondary" type="button" disabled>New Transaction</button>
-          </div>
-          <div id="receipt-content" class="receipt-empty"><span class="receipt-icon" aria-hidden="true">▤</span><span>No completed transaction yet.</span></div>
-        </section>
       </div>
     </main>
-    <footer>Campus Cafeteria POS · IT 415 Practical Examination</footer>
+    <footer>Campus Cafeteria POS <span>·</span> IT 415 Practical Examination</footer>
   </div>
+
+  <dialog id="error-dialog" class="app-dialog message-dialog" aria-labelledby="error-dialog-title" aria-describedby="error-dialog-message">
+    <div class="dialog-symbol is-error"><svg aria-hidden="true"><use href="#icon-alert"></use></svg></div>
+    <p class="section-label">Something needs attention</p><h2 id="error-dialog-title">Check the cash amount</h2><p id="error-dialog-message"></p>
+    <div class="dialog-actions"><button id="error-dialog-close" class="button button-primary" type="button">Got it</button></div>
+  </dialog>
+
+  <dialog id="confirm-dialog" class="app-dialog confirm-dialog" aria-labelledby="confirm-dialog-title">
+    <div class="dialog-symbol is-confirm"><svg aria-hidden="true"><use href="#icon-check"></use></svg></div>
+    <p class="section-label">Final check</p><h2 id="confirm-dialog-title">Complete this payment?</h2><p>Review the cash received before creating the receipt.</p>
+    <div class="confirm-breakdown"><div><span>Total due</span><strong id="confirm-total">₱0.00</strong></div><div><span>Cash received</span><strong id="confirm-cash">₱0.00</strong></div><div><span>Change</span><strong id="confirm-change">₱0.00</strong></div></div>
+    <div class="dialog-actions"><button id="confirm-cancel" class="button button-secondary" type="button">Go back</button><button id="confirm-accept" class="button button-primary" type="button">Confirm payment</button></div>
+  </dialog>
+
+  <dialog id="receipt-dialog" class="app-dialog receipt-dialog" aria-labelledby="receipt-title">
+    <div class="receipt-modal-header"><div class="dialog-symbol is-success"><svg aria-hidden="true"><use href="#icon-check"></use></svg></div><p class="section-label">Order completed</p><h2 id="receipt-title">Payment received!</h2><p>Your digital receipt is ready below.</p></div>
+    <section class="receipt-panel" aria-label="Digital receipt"><div id="receipt-content" class="receipt-empty"><span class="receipt-icon" aria-hidden="true">▤</span><span>No completed transaction yet.</span></div></section>
+    <div id="print-animation" class="print-animation" aria-live="polite" hidden><div class="printer-body"><svg aria-hidden="true"><use href="#icon-printer"></use></svg><span class="printing-paper"></span></div><span>Printing your receipt...</span></div>
+    <div class="receipt-actions"><button id="new-transaction" class="button button-secondary" type="button" disabled>New Transaction</button><button id="print-receipt" class="button button-primary" type="button"><svg aria-hidden="true"><use href="#icon-printer"></use></svg> Print receipt</button></div>
+  </dialog>
 </body>
 </html>
